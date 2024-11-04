@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: Currency
+  
+  #DATABASE POSTGRESQL CONFIG
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/currency?currentSchema=currency
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: always
+      continue-on-error: false
+      data-locations: classpath:demo_data.sql
+
+
+security:
+  jwt:
+    secret: da9583d1078b02d6f400a1710d82b63513b4654b #secretserverkey
+    access: 3600000
+    refresh: 2592000000
