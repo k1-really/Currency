@@ -1,14 +1,12 @@
 package com.kireally.Currency.config;
 
-import com.kireally.Currency.mapper.UserMapper;
-import com.kireally.Currency.model.user.User;
-import com.kireally.Currency.web.dto.user.UserDto;
 import com.kireally.Currency.web.security.JwtTokenFilter;
 import com.kireally.Currency.web.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -24,7 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@Lazy
+@RequiredArgsConstructor(onConstructor_ = @__(@Lazy))// In order to rid of cycle dependencies
 public class ApplicationConfig {
 
     private final JwtTokenProvider tokenProvider;
@@ -71,7 +70,9 @@ public class ApplicationConfig {
 
                 // Настраиваем доступ к конечным точкам (авторизация запросов)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**").permitAll() // Разрешаем доступ к эндпоинтам авторизации без авторизации
+                        .requestMatchers("/currency/auth/**").permitAll() // Разрешаем доступ к эндпоинтам авторизации без авторизации
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()                    // Остальные запросы требуют аутентификации
                 )
 
@@ -84,7 +85,4 @@ public class ApplicationConfig {
                 // Завершаем конфигурацию
                 .build();
     }
-
-
-
 }

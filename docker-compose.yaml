@@ -1,0 +1,37 @@
+version: '3'
+
+volumes:
+  cache:
+    driver: local
+
+services:
+  app:
+    build:
+      context: .
+    container_name: currency
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/currency?currentSchema=currency
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports:
+      - '8080:8080'
+
+  db:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=currency
+
+  redis:
+    image: redis:7.2-rc-alpine
+    restart: always
+    container_name: redis
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass cmVkaXNwYXNzd29yZA== #Password encoded from base 64 redispassword
+    volumes:
+      - cache:/data

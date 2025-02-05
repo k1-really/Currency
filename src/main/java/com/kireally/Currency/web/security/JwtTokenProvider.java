@@ -37,26 +37,26 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
     }
 
-    public String createAccessToken(Long userId, String username, Set<Role> roles){
+    public String createAccessToken(Long userId, String email, Set<Role> roles){
         Date now = new Date();
-        Date validity = new Date(now.getTime()+jwtProperties.getAccess());
+        Date validity = new Date(now.getTime() +jwtProperties.getAccess().toMillis());
         return Jwts.builder()
                 .claim("id",userId)
                 .claim("roles",resolveRoles(roles))
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key)
                 .compact();
     }
 
-    public String createRefreshToken(Long userId, String username){
+    public String createRefreshToken(Long userId, String email){
         Date now = new Date();
-        Date validity = new Date(now.getTime()+jwtProperties.getRefresh());
+        Date validity = new Date(now.getTime()+jwtProperties.getRefresh().toMillis());
 
         return Jwts.builder()
                 .claim("id",userId)
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key)

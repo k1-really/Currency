@@ -36,6 +36,7 @@ public class User {
     @Transient
     private String passwordConfirmation;
 
+    @Column(name = "role")
     @ElementCollection
     @CollectionTable(name = "roles")
     @Enumerated(value = EnumType.STRING)

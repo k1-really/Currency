@@ -9,6 +9,7 @@ import com.kireally.Currency.web.dto.user.UserDto;
 import com.kireally.Currency.web.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,22 +23,6 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public User create(User user){
-        if(userRepository.findByNickname(user.getNickname()).isPresent()){
-            throw new IllegalStateException("User with this nickname already exists.");
-        }
-        if(user.getPassword().equals(user.getPasswordConfirmation())){
-            throw new IllegalStateException("Passwords do not match.");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Set<Role> roles = Set.of(Role.ROLE_USER);
-        user.setRoles(roles);
-        userRepository.save(user);
-        return user;
-    }
 
     @PutMapping
     public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto userDto) {
@@ -46,11 +31,18 @@ public class UserController {
         return userMapper.toDto(updatedUser);
     }
 
+
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
         User user = userService.getById(id);
         return userMapper.toDto(user);
     }
+
+
+    public UserDto getByNickname(@RequestParam String nickname) {
+        return userMapper.toDto(userService.getByNickname(nickname));
+    }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {

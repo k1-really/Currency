@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Currency API
+  description: API для авторизации и регистрации пользователей
+  version: 1.0.0
+paths:
+  /currency/auth/login:
+    post:
+      summary: Вход в систему
+      operationId: login
+      requestBody:
+        description: Данные для входа пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JwtRequest'
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "jwt-token"
+        '400':
+          description: Ошибка входа
+        '401':
+          description: Неверные учетные данные
+
+  /currency/auth/register:
+    post:
+      summary: Регистрация нового пользователя
+      operationId: register
+      requestBody:
+        description: Данные для регистрации нового пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '201':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: Ошибка регистрации
+        '422':
+          description: Ошибки валидации данных
+
+components:
+  schemas:
+    JwtRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        surname:
+          type: string
+        nickname:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        passwordConfirmation:
+          type: string
+      required:
+        - name
+        - surname
+        - nickname
+        - email
+        - password
+        - passwordConfirmation

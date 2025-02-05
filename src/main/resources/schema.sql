@@ -15,5 +15,5 @@ create table if not exists currency.roles
     user_id int not null,
     "role" varchar not null,
     primary key (user_id,"role"),
-    constraint fk_users_roles_users foreign key (user_id) references users (id) on delete cascade on update no action
+    constraint fk_users_roles_users foreign key (user_id) references currency.users (id) on delete cascade on update no action
 );
