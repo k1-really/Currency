@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: Currency
 
@@ -10,29 +12,27 @@ spring:
   #REDIS INFO
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST}
       port: 6379
-      password: cmVkaXNwYXNzd29yZA==
+      password: ${REDIS_PASSWORD} #Password encoded from base 64 redispassword
 
   #DATABASE POSTGRESQL CONFIG
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/currency?currentSchema=currency
-    username: postgres
-    password: postgres
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
-      data-locations: classpath:demo_data.sql
+    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+#  sql:
+#    init:
+#      mode: always
+#      continue-on-error: false
+#      data-locations: classpath:demo_data.sql
       
   #JWT INFO
 security:
   jwt:
-    secret: da9583d1078b02d6f400a1710d82b63513b4654b #secretserverkey
-    access: 3600000
-    refresh: 2592000000
+    secret: ${JWT_SECRET} #secretserverkey
+    access: 1
+    refresh: 30
 
 
-#    volumes:
-#      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d

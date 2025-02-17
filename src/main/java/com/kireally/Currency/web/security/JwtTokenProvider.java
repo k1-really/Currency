@@ -1,5 +1,6 @@
 package com.kireally.Currency.web.security;
 
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.kireally.Currency.exception.AccessDeniedException;
 import com.kireally.Currency.model.user.Role;
 import com.kireally.Currency.model.user.User;
@@ -19,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -38,27 +41,25 @@ public class JwtTokenProvider {
     }
 
     public String createAccessToken(Long userId, String email, Set<Role> roles){
-        Date now = new Date();
-        Date validity = new Date(now.getTime() +jwtProperties.getAccess().toMillis());
+
+        Instant validity = Instant.now().plus(jwtProperties.getAccess(), ChronoUnit.HOURS);
         return Jwts.builder()
                 .claim("id",userId)
                 .claim("roles",resolveRoles(roles))
                 .setSubject(email)
-                .setIssuedAt(now)
-                .setExpiration(validity)
+                .setExpiration(Date.from(validity))
                 .signWith(key)
                 .compact();
     }
 
     public String createRefreshToken(Long userId, String email){
-        Date now = new Date();
-        Date validity = new Date(now.getTime()+jwtProperties.getRefresh().toMillis());
+
+        Instant validity = Instant.now().plus(jwtProperties.getRefresh(),ChronoUnit.DAYS);
 
         return Jwts.builder()
                 .claim("id",userId)
                 .setSubject(email)
-                .setIssuedAt(now)
-                .setExpiration(validity)
+                .setExpiration(Date.from(validity))
                 .signWith(key)
                 .compact();
     }

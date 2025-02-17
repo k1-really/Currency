@@ -11,6 +11,6 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "security.jwt")
 public class JwtProperties {
     private String secret;
-    private Duration access;
-    private Duration refresh;
+    private Long access;
+    private Long refresh;
 }

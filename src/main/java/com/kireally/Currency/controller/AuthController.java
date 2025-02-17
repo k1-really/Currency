@@ -9,7 +9,9 @@ import com.kireally.Currency.web.dto.auth.JwtResponse;
 import com.kireally.Currency.web.dto.user.UserDto;
 import com.kireally.Currency.web.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +45,12 @@ public class AuthController {
     @PostMapping("/refresh")
     public JwtResponse refresh(@RequestBody String refreshToken) {
         return authService.refresh(refreshToken);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        UserDto userDto = userMapper.toDto(userService.getByEmail(userDetails.getUsername()));
+        return ResponseEntity.ok(userDto);
     }
 
  /*   @PostMapping("/logout")
