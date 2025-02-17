@@ -84,7 +84,7 @@ public class JwtTokenProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-        return claims
+        return !claims
                 .getBody()
                 .getExpiration()
                 .before(new Date());

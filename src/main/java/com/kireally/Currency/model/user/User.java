@@ -37,7 +37,7 @@ public class User {
     private String passwordConfirmation;
 
     @Column(name = "role")
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "roles")
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;

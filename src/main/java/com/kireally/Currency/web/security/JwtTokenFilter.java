@@ -29,11 +29,15 @@ public class JwtTokenFilter extends GenericFilterBean {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             bearerToken = bearerToken.substring(7);
         }
+        System.out.println("Token" + bearerToken);
         if(bearerToken != null && jwtTokenProvider.validateToken(bearerToken)) {
             try{
+                System.out.println("1");
                 Authentication auth = jwtTokenProvider.getAuthentication(bearerToken);
+                System.out.println("2");
                 if(auth != null) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
+                    System.out.println("3");
                 }
             } catch(ResourceNotFoundException ignored){}
         }
