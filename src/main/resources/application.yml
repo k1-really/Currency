@@ -12,16 +12,16 @@ spring:
   #REDIS INFO
   data:
     redis:
-      host: ${REDIS_HOST}
+      host: localhost
       port: 6379
-      password: ${REDIS_PASSWORD} #Password encoded from base 64 redispassword
+      password: cmVkaXNwYXNzd29yZA== #Password encoded from base 64 redispassword
 
   #DATABASE POSTGRESQL CONFIG
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
-    username: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/currency?currentSchema=currency
+    username: postgres
+    password: postgres
 #  sql:
 #    init:
 #      mode: always
@@ -31,7 +31,7 @@ spring:
   #JWT INFO
 security:
   jwt:
-    secret: ${JWT_SECRET} #secretserverkey
+    secret: da9583d1078b02d6f400a1710d82b63513b4654b #secretserverkey
     access: 1
     refresh: 30
 
