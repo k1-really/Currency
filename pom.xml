@@ -31,7 +31,7 @@
 	</scm>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 		<hibernate.validator>8.0.1.Final</hibernate.validator>
 		<validation.api>2.0.1.Final</validation.api>
 		<mapstruct>1.6.2</mapstruct>
@@ -39,10 +39,10 @@
 		<jjwt.impl>0.12.6</jjwt.impl>
 		<jjwt.jackson>0.12.6</jjwt.jackson>
 		<springdoc.openapi>2.3.0</springdoc.openapi>
+		<liquibase.core>4.31.1</liquibase.core>
 	</properties>
 
 	<dependencies>
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -142,6 +142,13 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.36</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.core}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

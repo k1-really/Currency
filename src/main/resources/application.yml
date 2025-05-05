@@ -1,6 +1,12 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yml
+    enabled: true
+    default-schema: currency
+
+#  config:
+#    import: optional:file:.env[.properties]
   application:
     name: Currency
 
@@ -18,21 +24,13 @@ spring:
 
   #DATABASE POSTGRESQL CONFIG
   datasource:
-    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/currency?currentSchema=currency
     username: postgres
     password: postgres
-#  sql:
-#    init:
-#      mode: always
-#      continue-on-error: false
-#      data-locations: classpath:demo_data.sql
-      
+    driver-class-name: org.postgresql.Driver
   #JWT INFO
 security:
   jwt:
     secret: da9583d1078b02d6f400a1710d82b63513b4654b #secretserverkey
     access: 1
     refresh: 30
-
-

@@ -13,6 +13,8 @@ services:
     container_name: currency
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/currency?currentSchema=currency
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -28,7 +30,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=currency
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
 
   redis:
     image: redis:7.2-rc-alpine

@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
-
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -42,7 +41,6 @@ public class UserController {
     public UserDto getByNickname(@RequestParam String nickname) {
         return userMapper.toDto(userService.getByNickname(nickname));
     }
-
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {

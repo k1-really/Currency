@@ -30,10 +30,6 @@ public class AuthController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-    //private final TokenService tokenService;
-   // private final RedisTemplate<String, String> redisTemplate;
-
-
 
     @PostMapping("/login")
     public JwtResponse login(@Validated @RequestBody JwtRequest loginRequest) {
@@ -68,31 +64,7 @@ public class AuthController {
 
         String email = userDetails.getUsername();
 
-
         return ResponseEntity.ok(userMapper.toDto(userRepository.findByEmail(email).orElse(null)));
     }
 
- /*   @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
-        // Проверка, что заголовок Authorization передан
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Authorization header");
-        }
-
-        // Извлечение токена из заголовка
-        String token = authorizationHeader.substring(7); // Убираем "Bearer "
-
-        // Проверяем, валиден ли токен
-        if (!tokenService.isTokenValid(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
-        }
-
-        // Добавляем токен в Redis с TTL равным оставшемуся времени жизни токена
-        Long remainingTime = tokenService.getRemainingExpirationTime(token);
-        if (remainingTime != null) {
-            redisTemplate.opsForValue().set(token, "blacklisted", remainingTime, TimeUnit.MILLISECONDS);
-        }
-
-        return ResponseEntity.ok("Logged out successfully");
-    }*/
 }

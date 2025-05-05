@@ -1,6 +1,5 @@
 package com.kireally.Currency.web.security;
 
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.kireally.Currency.exception.AccessDeniedException;
 import com.kireally.Currency.model.user.Role;
 import com.kireally.Currency.model.user.User;
