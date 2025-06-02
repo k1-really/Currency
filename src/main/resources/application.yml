@@ -1,14 +1,42 @@
 spring:
 
+  application:
+    name: Currency
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        type: true
+        use_sql_comments: true
+  kafka:
+    admin:
+      properties:
+        offsets.topic.replication.factor: 1
+        transaction.state.log.replication.factor: 1
+        transaction.state.log.min.isr: 1
+    bootstrap-servers:
+      - "kafka:9092"
+    topics:
+      - name: "payment-command"
+        partitions: 1
+        replication-factor: 1
+      - name: "payment-command-result"
+        partitions: 1
+        replication-factor: 1
+
+  logging:
+    level:
+      org.hibernate.type.descriptor.sql: TRACE
+
   liquibase:
-    change-log: classpath:liquibase/db.changelog.yml
+    change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
     default-schema: currency
 
 #  config:
 #    import: optional:file:.env[.properties]
-  application:
-    name: Currency
 
   #CACHE INFO
   cache:
@@ -18,7 +46,7 @@ spring:
   #REDIS INFO
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
       password: cmVkaXNwYXNzd29yZA== #Password encoded from base 64 redispassword
 
@@ -28,6 +56,8 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+
+
   #JWT INFO
 security:
   jwt:

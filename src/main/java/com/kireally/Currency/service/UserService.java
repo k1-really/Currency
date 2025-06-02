@@ -1,7 +1,6 @@
 package com.kireally.Currency.service;
 
-import com.kireally.Currency.model.user.User;
-import com.kireally.Currency.web.dto.user.UserDto;
+import com.kireally.Currency.model.entity.user.User;
 
 public interface UserService {
     User getById(Long id);

@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  title: Payment Service API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /transactions/{transactionId}:
+    get:
+      summary: Получить детальную информацию о транзакции
+      description: Возвращает объект транзакции с полями (amount, currency, status, etc.).
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор транзакции
+      responses:
+        '200':
+          description: Детали транзакции
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentTransactionResponse'
+        '404':
+          description: Транзакция не найдена
+        '500':
+          description: Внутренняя ошибка сервера
+
+  /accounts:
+    post:
+      summary: Создать новый банковский счёт
+      description: Создаёт новый банковский счёт для клиента, задаёт начальный баланс (по умолчанию 0.00).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountCreateRequest'
+      responses:
+        '201':
+          description: Счёт успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountResponse'
+        '400':
+          description: Некорректные данные (например, не передан обязательный параметр)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
+  /accounts/{accountId}:
+    get:
+      summary: Получить информацию о конкретном счёте
+      description: Позволяет узнать баланс, валюту, клиента, к которому привязан счёт.
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Идентификатор банковского счёта
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Информация о счёте
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountResponse'
+        '400':
+          description: Некорректный запрос (например, accountId не является числом)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '404':
+          description: Счёт не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
+components:
+  schemas:
+    BankAccountCreateRequest:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          description: ID клиента
+        number:
+          type: string
+          description: Номер счёта (например, IBAN)
+        currency:
+          type: string
+          description: Код валюты (например, "USD")
+        balance:
+          type: string
+          format: bigdecimal
+      required:
+        - customerId
+        - accountNumber
+        - currency
+
+    BankAccountResponse:
+      type: object
+      properties:
+        bankAccountId:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор счёта
+        customerId:
+          type: integer
+          format: int64
+          description: ID клиента, к которому привязан этот счёт
+        accountNumber:
+          type: string
+          description: Номер счёта
+        balance:
+          type: number
+          format: double
+          description: Текущий баланс
+        currency:
+          type: string
+          description: Код валюты
+      required:
+        - bankAccountId
+        - customerId
+        - accountNumber
+        - balance
+        - currency
+
+    PaymentTransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type: integer
+          format: int64
+          description: Идентификатор транзакции
+        sourceAccountId:
+          type: integer
+          description: Счёт, с которого списываются средства
+        destinationAccountId:
+          type: integer
+          description: Счёт, на который зачисляются средства
+        amount:
+          type: number
+          format: double
+          description: Сумма транзакции
+        currency:
+          type: string
+          description: Код валюты (ISO)
+        status:
+          type: string
+          description: Текущий статус (SUCCESS, FAILED, REFUNDED и т.д.)
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата/время создания транзакции
+        description:
+          type: string
+          description: Назначение или комментарий
+        errorMessage:
+          type: string
+          description: Сообщение об ошибке при FAILED
+      required:
+        - transactionId
+        - amount
+        - currency
+        - status
+
+    ErrorDTO:
+      type: object
+      description: Структура ошибки, возвращаемая при неудачном выполнении запроса
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Время возникновения ошибки
+        status:
+          type: integer
+          description: Код HTTP-статуса
+        error:
+          type: string
+          description: Краткое название ошибки, например, "Bad Request" или "Not Found"
+        message:
+          type: string
+          description: Подробное описание ошибки
+        path:
+          type: string
+          description: Путь эндпоинта, на который пришёл запрос
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path

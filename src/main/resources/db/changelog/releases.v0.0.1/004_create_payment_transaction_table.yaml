@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-create-payment-transaction
+      author: Zavyalov Kirill
+      changes:
+        - createTable:
+            tableName: payment_transaction
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    autoIncrement: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: DECIMAL(19,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: VARCHAR(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error_message
+                  type: TEXT
+              - column:
+                  name: source_bank_account_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payment_source_account
+                    referencedTableName: bank_account
+                    referencedColumnNames: id
+              - column:
+                  name: destination_bank_account_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payment_destination_account
+                    referencedTableName: bank_account
+                    referencedColumnNames: id
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP

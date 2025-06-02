@@ -1,7 +1,8 @@
 package com.kireally.Currency.config;
 
-import com.kireally.Currency.web.security.JwtTokenFilter;
-import com.kireally.Currency.web.security.JwtTokenProvider;
+import com.kireally.Currency.service.TokenBlacklistService;
+import com.kireally.Currency.security.JwtTokenFilter;
+import com.kireally.Currency.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ public class ApplicationConfig {
 
     private final JwtTokenProvider tokenProvider;
     private final ApplicationContext context;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,6 +39,11 @@ public class ApplicationConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public JwtTokenFilter jwtTokenFilter() {
+        return new JwtTokenFilter(tokenProvider, tokenBlacklistService);
     }
 
     @Bean
@@ -80,7 +87,7 @@ public class ApplicationConfig {
                 .anonymous(AbstractHttpConfigurer::disable)
 
                 // Добавляем JWT-фильтр перед фильтром UsernamePasswordAuthenticationFilter
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
 
                 // Завершаем конфигурацию
                 .build();

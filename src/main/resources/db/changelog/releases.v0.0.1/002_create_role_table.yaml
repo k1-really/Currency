@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-roles
+      author: Zavyalov Kirill
+      changes:
+        - createTable:
+            tableName: roles
+            schemaName: currency
+            columns:
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: roles
+            columnNames: user_id, role
+            constraintName: pk_roles
+        - addForeignKeyConstraint:
+            baseTableName: roles
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_users_roles_users
+            onDelete: CASCADE
+  - changeSet:
+      id: 002-init-roles
+      author: Zavyalov Kirill
+      changes:
+        - sqlFile:
+            path: classpath:db/data/init-roles.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true

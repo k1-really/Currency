@@ -1,7 +1,7 @@
 package com.kireally.Currency.mapper;
 
-import com.kireally.Currency.model.user.User;
-import com.kireally.Currency.web.dto.user.UserDto;
+import com.kireally.Currency.model.entity.user.User;
+import com.kireally.Currency.model.dto.user.UserDto;
 import org.mapstruct.Mapper;
 
 

@@ -1,8 +1,8 @@
 package com.kireally.Currency.service.impl;
 
 import com.kireally.Currency.exception.ResourceNotFoundException;
-import com.kireally.Currency.model.user.Role;
-import com.kireally.Currency.model.user.User;
+import com.kireally.Currency.model.entity.enums.Role;
+import com.kireally.Currency.model.entity.user.User;
 import com.kireally.Currency.repository.UserRepository;
 import com.kireally.Currency.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,6 +1,6 @@
 package com.kireally.Currency.repository;
 
-import com.kireally.Currency.model.user.User;
+import com.kireally.Currency.model.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - includeAll:
+      path: classpath:/db/changelog/releases.v0.0.1/
+      relativeToChangelogFile: false
