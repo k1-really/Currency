@@ -1,5 +1,6 @@
 package com.kireally.Currency.config;
 
+
 import com.kireally.Currency.model.entity.enums.PaymentTransactionCommand;
 import com.kireally.Currency.service.handler.CancelPaymentTransactionHandler;
 import com.kireally.Currency.service.handler.CreatePaymentTransactionHandler;
@@ -22,4 +23,11 @@ public class PaymentTransactionCommandConfig {
         commandHandlers.put(PaymentTransactionCommand.REFUND, cancelPaymentTransactionHandler);
         return commandHandlers;
     }
+
+//    @Bean
+//    public ObjectMapper objectMapper (){
+//        var objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule());
+//        return objectMapper;
+//    }
 }

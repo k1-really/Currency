@@ -6,9 +6,12 @@ import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransacti
 import com.kireally.Currency.model.entity.bankAccount.PaymentTransaction;
 import com.kireally.Currency.repository.PaymentTransactionRepository;
 import com.kireally.Currency.service.PaymentTransactionService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.openapitools.model.PaymentTransactionResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +23,31 @@ import java.util.Optional;
 public class PaymentTransactionServiceImpl implements PaymentTransactionService {
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final PaymentTransactionMapper paymentTransactionMapper;
-    @Transactional
-    public PaymentTransaction save(PaymentTransaction paymentTransaction){
 
-        return paymentTransactionRepository.save(paymentTransaction);
+    @Transactional
+    public CreatePaymentTransactionResponse save(PaymentTransaction paymentTransaction) {
+        var entity = paymentTransactionRepository.save(paymentTransaction);
+        return paymentTransactionMapper.toKafkaDto(entity);
     }
 
     @Transactional
-    public Optional<PaymentTransaction> findById(Long id){
-        return paymentTransactionRepository.findById(id);
+    public Optional<PaymentTransaction> findOptionalById(@NotNull Long id){
+        try{
+            return paymentTransactionRepository.findById(id);
+        } catch (EntityNotFoundException e){
+            return Optional.empty();
+        }
     }
+
+    @Transactional
+    public PaymentTransactionResponse findById(@NotNull Long id){
+        var entity = paymentTransactionRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Payment transaction with id " + id + " not found")
+        );
+        return paymentTransactionMapper.toDto(entity);
+    }
+
+
+
 
 }

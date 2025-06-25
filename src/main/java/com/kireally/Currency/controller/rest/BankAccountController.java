@@ -1,14 +1,18 @@
 package com.kireally.Currency.controller.rest;
 
+import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.service.BankAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 import org.openapitools.api.AccountsApi;
 import org.openapitools.model.BankAccountCreateRequest;
 import org.openapitools.model.BankAccountResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -27,5 +31,6 @@ public class BankAccountController implements AccountsApi {
     public ResponseEntity<BankAccountResponse> accountsPost(BankAccountCreateRequest bankAccountCreateRequest) {
         return ResponseEntity.ok(bankAccountService.save(bankAccountCreateRequest));
     }
+
 }
 

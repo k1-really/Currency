@@ -24,7 +24,7 @@ public class PaymentTransaction extends BaseEntity {
     private String currency;
 
     @Convert(converter = PaymentTransactionStatusConverter.class)
-    private PaymentTransactionStatus paymentTransactionStatus;
+    private PaymentTransactionStatus status;
 
     private String errorMessage;
 

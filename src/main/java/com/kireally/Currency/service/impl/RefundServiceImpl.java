@@ -32,7 +32,7 @@ public class RefundServiceImpl implements RefundService {
 
     @Transactional
     public CancelPaymentResponse cancelPayment(CancelPaymentRequest cancelPaymentRequest) {
-        var sourceTransaction = paymentTransactionService.findById(cancelPaymentRequest.getTransactionId()).get();
+        var sourceTransaction = paymentTransactionService.findOptionalById(cancelPaymentRequest.getTransactionId()).get();
 
         sourceTransaction.setAmount(
                 sourceTransaction.getAmount().subtract(cancelPaymentRequest.getRefundedAmount())
@@ -45,5 +45,6 @@ public class RefundServiceImpl implements RefundService {
 
         return refundMapper.toResponse(entity);
     }
+
 
 }

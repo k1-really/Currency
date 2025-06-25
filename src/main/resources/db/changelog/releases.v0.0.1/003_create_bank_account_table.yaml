@@ -9,9 +9,9 @@ databaseChangeLog:
               - column:
                   name: id
                   type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    autoIncrement: true
                     nullable: false
               - column:
                   name: customer_id
@@ -43,3 +43,13 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: TIMESTAMP
+  - changeSet:
+      id: 003-init-bankAccount
+      author: Zavyalov Kirill
+      runOnChange: true
+      changes:
+        - sqlFile:
+            path: classpath:db/data/init-bankAccounts.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true

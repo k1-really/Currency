@@ -32,29 +32,22 @@ public class CreatePaymentTransactionHandler implements PaymentTransactionComman
     @Override
     @Transactional
     public void process(Long requestId, String message) {
-        CreatePaymentTransactionRequest request = jsonConverter.fromJson(message, CreatePaymentTransactionRequest.class);
+        var request = jsonConverter.fromJson(message, CreatePaymentTransactionRequest.class);
         paymentTransactionValidator.validateCreatePaymentTransactionRequest(request);
-        BankAccount sourceBankAccount = bankAccountService.findById(request.getSourceBankAccountId()).get();
-        sourceBankAccount.setBalance(
-                sourceBankAccount.getBalance().subtract(request.getAmount())
-        );
-        Optional<BankAccount> destinationBankAccount = Optional.empty();
+
+        var sourceAccount = bankAccountService.findOptionalById(request.getSourceBankAccountId()).get();
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(request.getAmount()));
+
+        BankAccount destinationBankAccount = null;
         if(request.getDestinationBankAccountId() != null){
-            destinationBankAccount = bankAccountService.findById(request.getDestinationBankAccountId());
-            destinationBankAccount.get().setBalance(
-                    destinationBankAccount.get().getBalance().add(request.getAmount())
-            );
+            destinationBankAccount = bankAccountService.findOptionalById(request.getDestinationBankAccountId()).get();
         }
 
-        PaymentTransaction paymentTransaction = paymentTransactionMapper.toEntity(request);
-        paymentTransaction.setSourceBankAccount(sourceBankAccount);
-        destinationBankAccount.ifPresent(paymentTransaction::setDestinationBankAccount);
-        paymentTransaction.setPaymentTransactionStatus(PaymentTransactionStatus.SUCCESS);
-        PaymentTransaction savedPaymentTransaction = paymentTransactionService.save(paymentTransaction);
-        paymentTransactionProducer.sendCommandResult(
-                requestId,
-                PaymentTransactionCommand.CREATE,
-                savedPaymentTransaction.toString()
+        var result = paymentTransactionService.save(
+                paymentTransactionMapper.toEntity(request, sourceAccount, destinationBankAccount, PaymentTransactionStatus.SUCCESS)
         );
+
+        paymentTransactionProducer.sendCommandResult(requestId, PaymentTransactionCommand.CREATE, result.toString());
+
     }
 }
