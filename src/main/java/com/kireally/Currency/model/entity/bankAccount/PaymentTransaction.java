@@ -19,9 +19,11 @@ import java.util.List;
 @AllArgsConstructor
 public class PaymentTransaction extends BaseEntity {
 
-    private BigDecimal amount;
+    private BigDecimal amountDebited;
 
-    private String currency;
+    private BigDecimal amountCredited;
+
+    private BigDecimal exchangeRate;
 
     @Convert(converter = PaymentTransactionStatusConverter.class)
     private PaymentTransactionStatus status;
@@ -29,12 +31,12 @@ public class PaymentTransaction extends BaseEntity {
     private String errorMessage;
 
     @ManyToOne
-    @JoinColumn(name = "source_bank_account_id")
-    private BankAccount sourceBankAccount;
+    @JoinColumn(name = "source_currency_account_id", nullable = false)
+    private CurrencyAccount source;
 
     @ManyToOne
-    @JoinColumn(name = "destination_bank_account_id")
-    private BankAccount destinationBankAccount;
+    @JoinColumn(name = "destination_currency_account_id")
+    private CurrencyAccount destination;
 
     @OneToMany(mappedBy = "paymentTransaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Refund> refunds;

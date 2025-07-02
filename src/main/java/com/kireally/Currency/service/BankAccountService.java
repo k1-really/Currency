@@ -7,11 +7,11 @@ import org.openapitools.model.BankAccountCreateRequest;
 import org.openapitools.model.BankAccountResponse;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 public interface BankAccountService {
-    BankAccountResponse findById(Long id);
-    Optional<BankAccount> findOptionalById(Long id);
-    Optional<BankAccount> findByAccount(String accountNumber);
-    BankAccountResponse save(BankAccountCreateRequest request);
+    BankAccountResponse findByCustomerId(@NotNull Long customerId);
+    Optional<BankAccount> findById(@NotNull Long id);
+    BankAccountResponse create(BankAccountCreateRequest request);
 }

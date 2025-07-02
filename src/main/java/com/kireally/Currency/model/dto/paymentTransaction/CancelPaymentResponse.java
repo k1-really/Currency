@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CancelPaymentResponse {
-    private Long refundId;
     private CommandResultStatus status;
     private String errorMessage;
 }

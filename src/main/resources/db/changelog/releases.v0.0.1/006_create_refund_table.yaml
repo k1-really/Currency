@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 005-create-refund
+      id: create-refund-table
       author: Zavyalov Kirill
       changes:
         - createTable:
@@ -9,18 +9,16 @@ databaseChangeLog:
               - column:
                   name: id
                   type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
-                    autoIncrement: true
                     nullable: false
               - column:
                   name: refunded_amount
                   type: DECIMAL(19,4)
-                  constraints:
-                    nullable: false
               - column:
                   name: status
-                  type: VARCHAR(20)
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:
@@ -43,3 +41,6 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: TIMESTAMP
+              - column:
+                  name: version
+                  type: INT

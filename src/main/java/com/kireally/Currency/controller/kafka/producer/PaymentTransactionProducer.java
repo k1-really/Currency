@@ -31,6 +31,4 @@ public class PaymentTransactionProducer {
                 .setHeader("commandType", commandType)
                 .build();
     }
-
-
 }

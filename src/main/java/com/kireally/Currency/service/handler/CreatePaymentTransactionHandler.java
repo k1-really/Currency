@@ -9,45 +9,45 @@ import com.kireally.Currency.model.entity.enums.PaymentTransactionCommand;
 import com.kireally.Currency.model.entity.enums.PaymentTransactionStatus;
 import com.kireally.Currency.service.BankAccountService;
 import com.kireally.Currency.service.PaymentTransactionService;
+import com.kireally.Currency.service.impl.PaymentTransactionServiceImpl;
 import com.kireally.Currency.util.JsonConverter;
 import com.kireally.Currency.validation.validators.PaymentTransactionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+/**
+ * Обрабатывает команды на возврат платежа
+ */
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-public class CreatePaymentTransactionHandler implements PaymentTransactionCommandHandler{
+public class CreatePaymentTransactionHandler implements PaymentTransactionCommandHandler {
+    private final PaymentTransactionServiceImpl paymentTransactionService;
+
     private final JsonConverter jsonConverter;
     private final PaymentTransactionValidator paymentTransactionValidator;
-    private final BankAccountService bankAccountService;
-    private final PaymentTransactionMapper paymentTransactionMapper;
-    private final PaymentTransactionService paymentTransactionService;
     private final PaymentTransactionProducer paymentTransactionProducer;
 
+    /**
+     * Переводит {@code amount} со счёта source на счет dest,
+     * с конвертацией по курсу, если currency отличаются.
+     */
     @Override
-    @Transactional
-    public void process(Long requestId, String message) {
+    public void processCommand(Long requestId, String message) {
         var request = jsonConverter.fromJson(message, CreatePaymentTransactionRequest.class);
-        paymentTransactionValidator.validateCreatePaymentTransactionRequest(request);
+        paymentTransactionValidator.validateCreateTransactionRequest(request);
 
-        var sourceAccount = bankAccountService.findOptionalById(request.getSourceBankAccountId()).get();
-        sourceAccount.setBalance(sourceAccount.getBalance().subtract(request.getAmount()));
+        var tx = paymentTransactionService.transfer(request);
 
-        BankAccount destinationBankAccount = null;
-        if(request.getDestinationBankAccountId() != null){
-            destinationBankAccount = bankAccountService.findOptionalById(request.getDestinationBankAccountId()).get();
-        }
-
-        var result = paymentTransactionService.save(
-                paymentTransactionMapper.toEntity(request, sourceAccount, destinationBankAccount, PaymentTransactionStatus.SUCCESS)
+        paymentTransactionProducer.sendCommandResult(
+                requestId,
+                PaymentTransactionCommand.CREATE,
+                tx.toString()
         );
-
-        paymentTransactionProducer.sendCommandResult(requestId, PaymentTransactionCommand.CREATE, result.toString());
-
     }
 }
+

@@ -18,33 +18,23 @@ import java.math.BigDecimal;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RefundServiceImpl implements RefundService {
-    private final PaymentTransactionService paymentTransactionService;
+public class RefundServiceImpl {
     private final RefundRepository refundRepository;
+    private final RefundCalculator refundCalculator;
+    private final RefundPolicy refundPolicy;
     private final RefundMapper refundMapper;
-    public BigDecimal getTotalRefundedAmount(Long transactionId) {
-        var refunds = refundRepository.findAllByPaymentTransactionId(transactionId);
-
-        return refunds.stream()
-                .map(Refund::getRefundedAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
 
     @Transactional
-    public CancelPaymentResponse cancelPayment(CancelPaymentRequest cancelPaymentRequest) {
-        var sourceTransaction = paymentTransactionService.findOptionalById(cancelPaymentRequest.getTransactionId()).get();
+    public CancelPaymentResponse cancelPayment(CancelPaymentRequest request) {
+        var transaction = refundPolicy.checkAndFetchTransaction(request.getTransactionId());
+        var remainingAmount = refundPolicy.calculateRemainingRefundable(transaction, request.getRefundedAmount());
 
-        sourceTransaction.setAmount(
-                sourceTransaction.getAmount().subtract(cancelPaymentRequest.getRefundedAmount())
-        );
+        refundCalculator.applyRefund(transaction, remainingAmount);
+        var refund = refundMapper.toEntity(request, RefundStatus.COMPLETED);
+        refund.setPaymentTransaction(transaction);
+        var savedRefund = refundRepository.save(refund);
 
-        var entity = refundRepository.save(
-                refundMapper.toEntity(cancelPaymentRequest, RefundStatus.COMPLETED)
-        );
-        entity.setPaymentTransaction(sourceTransaction);
-
-        return refundMapper.toResponse(entity);
+        return refundMapper.toResponse(savedRefund);
     }
-
-
 }
+

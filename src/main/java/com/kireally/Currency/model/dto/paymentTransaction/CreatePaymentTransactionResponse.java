@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePaymentTransactionResponse {
-    private Long paymentTransactionId;
     private CommandResultStatus status;
     private String errorMessage;
     private LocalDateTime executedAt;

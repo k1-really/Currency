@@ -1,20 +1,19 @@
 package com.kireally.Currency.model.entity.enums.converter;
 
-import com.kireally.Currency.model.entity.enums.PaymentTransactionStatus;
 import com.kireally.Currency.model.entity.enums.RefundStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import lombok.Getter;
 
 @Converter(autoApply = true)
-public class RefundStatusConverter implements AttributeConverter<RefundStatus,String> {
+public class RefundStatusConverter  implements AttributeConverter<RefundStatus, String> {
+
     @Override
-    public String convertToDatabaseColumn(RefundStatus refundStatus) {
-        return refundStatus == null ? null : refundStatus.name();
+    public String convertToDatabaseColumn(RefundStatus status) {
+        return (status == null) ? null : status.name();
     }
 
     @Override
-    public RefundStatus convertToEntityAttribute(String s) {
-        return s == null ? null : RefundStatus.fromString(s);
+    public RefundStatus convertToEntityAttribute(String dbData) {
+        return (dbData == null) ? null : RefundStatus.fromString(dbData);
     }
 }

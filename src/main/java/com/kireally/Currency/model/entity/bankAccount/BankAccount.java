@@ -1,13 +1,15 @@
 package com.kireally.Currency.model.entity.bankAccount;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "bank_account")
@@ -16,8 +18,18 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankAccount extends BaseEntity{
-    private String number;
-    private BigDecimal balance;
+    @Column(name = "customer_id")
+    @NotNull
     private Long customerId;
-    private String currency;
+
+    @NotBlank
+    private String number;
+
+    @OneToMany(
+            mappedBy = "bankAccount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<CurrencyAccount> currencyAccounts;
+
 }

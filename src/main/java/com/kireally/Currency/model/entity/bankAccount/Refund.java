@@ -17,17 +17,16 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Refund extends BaseEntity{
+public class Refund extends BaseEntity {
 
     private BigDecimal refundedAmount;
-
-    private String reason;
 
     @Convert(converter = RefundStatusConverter.class)
     private RefundStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_transaction_id", referencedColumnName = "id")
-    private PaymentTransaction paymentTransaction;
+    private String reason;
 
+    @ManyToOne
+    @JoinColumn(name = "payment_transaction_id", referencedColumnName = "id", nullable = false)
+    private PaymentTransaction paymentTransaction;
 }

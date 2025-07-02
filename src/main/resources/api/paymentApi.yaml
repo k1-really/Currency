@@ -2,38 +2,19 @@ openapi: 3.0.0
 info:
   title: Payment Service API
   version: "1.0.0"
+
 servers:
   - url: http://localhost:8080/api
 
 paths:
-  /transactions/{transactionId}:
-    get:
-      summary: Получить детальную информацию о транзакции
-      description: Возвращает объект транзакции с полями (amount, currency, status, etc.).
-      parameters:
-        - name: transactionId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: Идентификатор транзакции
-      responses:
-        '200':
-          description: Детали транзакции
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentTransactionResponse'
-        '404':
-          description: Транзакция не найдена
-        '500':
-          description: Внутренняя ошибка сервера
-
   /accounts:
     post:
-      summary: Создать новый банковский счёт
-      description: Создаёт новый банковский счёт для клиента, задаёт начальный баланс (по умолчанию 0.00).
+      operationId: createAccount
+      summary: Создать новый банковский счёт (кошелёк)
+      description: |
+        Создаёт банковский счёт‑контейнер. При создании можно сразу передать список
+        валютных субсчетов (currencyAccounts) с начальными балансами, либо оставить
+        массив пустым — тогда валютные счета можно открыть позднее.
       requestBody:
         required: true
         content:
@@ -48,7 +29,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BankAccountResponse'
         '400':
-          description: Некорректные данные (например, не передан обязательный параметр)
+          description: Некорректные данные
           content:
             application/json:
               schema:
@@ -62,25 +43,24 @@ paths:
 
   /accounts/{accountId}:
     get:
-      summary: Получить информацию о конкретном счёте
-      description: Позволяет узнать баланс, валюту, клиента, к которому привязан счёт.
+      operationId: getAccount
+      summary: Получить информацию о банковском счёте‑контейнере
       parameters:
         - name: accountId
           in: path
           required: true
-          description: Идентификатор банковского счёта
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: Информация о счёте
+          description: Информация о счёте и его валютных субсчетах
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BankAccountResponse'
         '400':
-          description: Некорректный запрос (например, accountId не является числом)
+          description: Некорректный идентификатор
           content:
             application/json:
               schema:
@@ -100,6 +80,8 @@ paths:
 
 components:
   schemas:
+
+    # ────────── Bank Account (кошелёк клиента) ──────────
     BankAccountCreateRequest:
       type: object
       properties:
@@ -109,17 +91,15 @@ components:
           description: ID клиента
         number:
           type: string
-          description: Номер счёта (например, IBAN)
-        currency:
-          type: string
-          description: Код валюты (например, "USD")
-        balance:
-          type: string
-          format: bigdecimal
+          description: Внешний номер/IBAN кошелька
+        currencyAccounts:
+          type: array
+          description: Начальный набор валютных субсчетов
+          items:
+            $ref: '#/components/schemas/CurrencyAccountCreate'
       required:
         - customerId
         - accountNumber
-        - currency
 
     BankAccountResponse:
       type: object
@@ -127,87 +107,70 @@ components:
         bankAccountId:
           type: integer
           format: int64
-          description: Уникальный идентификатор счёта
         customerId:
           type: integer
           format: int64
-          description: ID клиента, к которому привязан этот счёт
         accountNumber:
           type: string
-          description: Номер счёта
-        balance:
-          type: number
-          format: double
-          description: Текущий баланс
-        currency:
-          type: string
-          description: Код валюты
+        currencyAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrencyAccount'
       required:
         - bankAccountId
         - customerId
         - accountNumber
-        - balance
-        - currency
+        - currencyAccounts
 
-    PaymentTransactionResponse:
+    # ────────── Currency sub‑accounts ──────────
+    CurrencyAccountCreate:
       type: object
       properties:
-        transactionId:
-          type: integer
-          format: int64
-          description: Идентификатор транзакции
-        sourceAccountId:
-          type: integer
-          description: Счёт, с которого списываются средства
-        destinationAccountId:
-          type: integer
-          description: Счёт, на который зачисляются средства
-        amount:
-          type: number
-          format: double
-          description: Сумма транзакции
         currency:
           type: string
-          description: Код валюты (ISO)
-        status:
-          type: string
-          description: Текущий статус (SUCCESS, FAILED, REFUNDED и т.д.)
-        createdAt:
-          type: string
-          format: date-time
-          description: Дата/время создания транзакции
-        description:
-          type: string
-          description: Назначение или комментарий
-        errorMessage:
-          type: string
-          description: Сообщение об ошибке при FAILED
+          description: Код валюты ISO‑4217 (например, "USD")
+        balance:
+          type: number
+          format: double
+          description: Начальный остаток в указанной валюте
       required:
-        - transactionId
-        - amount
         - currency
-        - status
+        - balance
 
+    CurrencyAccount:
+      allOf:
+        - $ref: '#/components/schemas/CurrencyAccountCreate'
+        - type: object
+          properties:
+            currencyAccountId:
+              type: integer
+              format: int64
+            currency:
+              type: string
+              description: Код валюты ISO‑4217 (например, "USD")
+            balance:
+              type: number
+              format: double
+              description: Начальный остаток в указанной валюте
+
+          required:
+            - currencyAccountId
+
+    # ────────── Ошибка ─────────
     ErrorDTO:
       type: object
-      description: Структура ошибки, возвращаемая при неудачном выполнении запроса
       properties:
         timestamp:
           type: string
           format: date-time
-          description: Время возникновения ошибки
         status:
           type: integer
-          description: Код HTTP-статуса
         error:
           type: string
-          description: Краткое название ошибки, например, "Bad Request" или "Not Found"
         message:
           type: string
-          description: Подробное описание ошибки
         path:
           type: string
-          description: Путь эндпоинта, на который пришёл запрос
       required:
         - timestamp
         - status

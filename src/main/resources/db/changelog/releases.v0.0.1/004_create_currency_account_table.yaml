@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-bank-account-table
+      id: create-currency-account-table
       author: Zavyalov Kirill
       changes:
         - createTable:
-            tableName: bank_account
+            tableName: currency_account
             columns:
               - column:
                   name: id
@@ -14,15 +14,23 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: customer_id
-                  type: BIGINT
+                  name: currency_type
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:
-                  name: number
-                  type: VARCHAR(255)
+                  name: balance
+                  type: DECIMAL(19,4)
                   constraints:
                     nullable: false
+              - column:
+                  name: bank_account_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_currency_account_bank_account
+                    referencedTableName: bank_account
+                    referencedColumnNames: id
               - column:
                   name: created_at
                   type: TIMESTAMP
@@ -35,13 +43,3 @@ databaseChangeLog:
               - column:
                   name: version
                   type: INT
-#  - changeSet:
-#      id: 003-init-bankAccount
-#      author: Zavyalov Kirill
-#      runOnChange: true
-#      changes:
-#        - sqlFile:
-#            path: classpath:db/data/init-bankAccounts.sql
-#            relativeToChangelogFile: false
-#            splitStatements: true
-#            stripComments: true

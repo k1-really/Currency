@@ -1,3 +1,4 @@
+/*
 package com.kireally.Currency.controller.kafka.test;
 
 import com.kireally.Currency.controller.kafka.producer.PaymentTransactionProducer;
@@ -54,3 +55,4 @@ public class PaymentTransactionTest {
         return "Cancel payment command sent with requestId: " + requestId;
     }
 }
+*/

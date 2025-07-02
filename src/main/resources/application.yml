@@ -31,11 +31,13 @@ spring:
       org.hibernate.type.descriptor.sql: TRACE
 
   liquibase:
+    drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
     default-schema: currency
 
-#  config:
+
+  #  config:
 #    import: optional:file:.env[.properties]
 
   #CACHE INFO
@@ -64,3 +66,8 @@ security:
     secret: da9583d1078b02d6f400a1710d82b63513b4654b #secretserverkey
     access: 1
     refresh: 30
+
+currencyfreaks:
+  api:
+    key: 465eadc1dd6e401fbaff4711b73892f8           # забирается из env
+    url: https://api.currencyfreaks.com/v2.0/rates/    # базовый URL
