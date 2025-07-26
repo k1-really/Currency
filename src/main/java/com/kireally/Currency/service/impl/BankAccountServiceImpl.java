@@ -2,6 +2,7 @@ package com.kireally.Currency.service.impl;
 
 import com.kireally.Currency.mapper.BankAccountMapper;
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
+import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
 import com.kireally.Currency.repository.BankAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,7 @@ import org.openapitools.model.BankAccountResponse;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -39,15 +41,15 @@ public class BankAccountServiceImpl {
 
     @Transactional
     public BankAccountResponse create(BankAccountCreateRequest request) {
-        var optionalAccount = bankAccountRepository.findByCustomerId(request.getCustomerId());
+        Optional<BankAccount> optionalAccount = bankAccountRepository.findByCustomerId(request.getCustomerId());
 
         if (optionalAccount.isPresent()) {
             log.info("Bank account with customer id {} already exists", optionalAccount.get().getCustomerId());
             return bankAccountMapper.toDto(optionalAccount.get());
         }
-        var temp = bankAccountMapper.toEntity(request);
-        var bankAccount = bankAccountRepository.save(temp);
-        var currencyAccounts = currencyAccountService.saveAll(request.getCurrencyAccounts(), bankAccount);
+        BankAccount temp = bankAccountMapper.toEntity(request);
+        BankAccount bankAccount = bankAccountRepository.save(temp);
+        List<CurrencyAccount> currencyAccounts = currencyAccountService.saveAll(request.getCurrencyAccounts(), bankAccount);
         bankAccount.setCurrencyAccounts(currencyAccounts);
 
         return bankAccountMapper.toDto(bankAccount);

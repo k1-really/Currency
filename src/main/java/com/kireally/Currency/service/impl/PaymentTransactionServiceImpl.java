@@ -3,14 +3,11 @@ package com.kireally.Currency.service.impl;
 import com.kireally.Currency.exception.InsufficientFundsException;
 import com.kireally.Currency.mapper.PaymentTransactionMapper;
 import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionRequest;
-import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionResponse;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
 import com.kireally.Currency.model.entity.bankAccount.PaymentTransaction;
 import com.kireally.Currency.repository.PaymentTransactionRepository;
 import com.kireally.Currency.service.PaymentTransactionService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +22,7 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PaymentTransactionServiceImpl {
+public class PaymentTransactionServiceImpl implements PaymentTransactionService {
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final PaymentTransactionMapper paymentTransactionMapper;
     private final CurrencyAccountServiceImpl currencyAccountService;
@@ -65,8 +62,8 @@ public class PaymentTransactionServiceImpl {
 
 
         var isCurrencyExchangeNeeded = !source.getCurrencyType().equals(dest.getCurrencyType());
-        PaymentTransaction paymentTransaction = null;
-        BigDecimal destAmount = null;
+        PaymentTransaction paymentTransaction;
+        BigDecimal destAmount;
         if (isCurrencyExchangeNeeded) {
             var currencyConvertResult = currencyConverterService.convert(
                     source.getCurrencyType(), dest.getCurrencyType(), request.getAmount());

@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -23,7 +22,7 @@ public class BankAccount extends BaseEntity{
     private Long customerId;
 
     @NotBlank
-    private String number;
+    private String accountNumber;
 
     @OneToMany(
             mappedBy = "bankAccount",

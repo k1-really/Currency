@@ -5,6 +5,7 @@ import com.kireally.Currency.model.dto.CurrencyAccountDto;
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
 import com.kireally.Currency.repository.CurrencyAccountRepository;
+import com.kireally.Currency.service.CurrencyAccountService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CurrencyAccountServiceImpl {
+public class CurrencyAccountServiceImpl implements CurrencyAccountService {
     private final CurrencyAccountRepository currencyAccountRepository;
     private final CurrencyAccountMapper currencyAccountMapper;
 
@@ -71,7 +72,7 @@ public class CurrencyAccountServiceImpl {
     @Transactional
     public List<CurrencyAccount> saveAll(List<CurrencyAccountCreate> currencyAccounts,
                                          BankAccount bankAccount) {
-        var accounts = currencyAccounts.stream()
+        List<CurrencyAccount> accounts = currencyAccounts.stream()
                 .map(currencyAccountMapper::toEntity)
                 .collect(Collectors.toList());
 

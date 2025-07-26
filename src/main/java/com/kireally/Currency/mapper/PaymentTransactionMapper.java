@@ -1,9 +1,7 @@
 package com.kireally.Currency.mapper;
 
 import com.kireally.Currency.model.dto.enums.CommandResultStatus;
-import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionRequest;
 import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionResponse;
-import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
 import com.kireally.Currency.model.entity.bankAccount.PaymentTransaction;
 import com.kireally.Currency.model.entity.enums.PaymentTransactionStatus;
@@ -43,7 +41,6 @@ public interface PaymentTransactionMapper {
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-
     PaymentTransaction toEntity(
             CurrencyAccount source,
             CurrencyAccount destination,

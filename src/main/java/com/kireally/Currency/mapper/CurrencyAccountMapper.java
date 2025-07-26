@@ -13,7 +13,7 @@ import org.openapitools.model.CurrencyAccountCreate;
 public interface CurrencyAccountMapper {
     CurrencyAccountDto toDto(CurrencyAccount currencyAccount);
 
-    @Mapping(source = "currency", target = "currencyType", qualifiedByName = "toCurrencyType")
+    @Mapping(source = "currencyType", target = "currencyType", qualifiedByName = "toCurrencyType")
     CurrencyAccount toEntity(CurrencyAccountCreate create);
 
     @Named("toCurrencyType")

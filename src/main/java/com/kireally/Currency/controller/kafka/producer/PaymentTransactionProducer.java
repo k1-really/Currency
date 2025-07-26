@@ -17,7 +17,7 @@ public class PaymentTransactionProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     public <T> void sendCommandResult(Long requestId, PaymentTransactionCommand commandType, String message) {
-        var kafkaMessage = buildMessage(commandType, requestId, message);
+        Message<String> kafkaMessage = buildMessage(commandType, requestId, message);
 
         kafkaTemplate.send(kafkaMessage);
         log.info("Sent command result: {}", message);

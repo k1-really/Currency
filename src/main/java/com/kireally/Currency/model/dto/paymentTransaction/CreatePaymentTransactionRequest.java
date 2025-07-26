@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class CreatePaymentTransactionRequest {
     @NotNull
     private Long sourceId;      // именно sub-account
-    private Long destId; // тоже sub-account (свой или чужой)
+    private Long destId;        // тоже sub-account (свой или чужой)
     @NotNull
     @DecimalMin("0.01")
     private BigDecimal amount;                 // сумма списания в валюте source

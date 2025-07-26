@@ -89,7 +89,7 @@ components:
           type: integer
           format: int64
           description: ID клиента
-        number:
+        accountNumber:
           type: string
           description: Внешний номер/IBAN кошелька
         currencyAccounts:
@@ -104,9 +104,6 @@ components:
     BankAccountResponse:
       type: object
       properties:
-        bankAccountId:
-          type: integer
-          format: int64
         customerId:
           type: integer
           format: int64
@@ -126,7 +123,7 @@ components:
     CurrencyAccountCreate:
       type: object
       properties:
-        currency:
+        currencyType:
           type: string
           description: Код валюты ISO‑4217 (например, "USD")
         balance:
@@ -141,20 +138,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/CurrencyAccountCreate'
         - type: object
-          properties:
-            currencyAccountId:
-              type: integer
-              format: int64
-            currency:
-              type: string
-              description: Код валюты ISO‑4217 (например, "USD")
-            balance:
-              type: number
-              format: double
-              description: Начальный остаток в указанной валюте
 
-          required:
-            - currencyAccountId
 
     # ────────── Ошибка ─────────
     ErrorDTO:

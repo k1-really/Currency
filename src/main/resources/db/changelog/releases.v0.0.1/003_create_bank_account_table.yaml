@@ -19,7 +19,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: number
+                  name: account_number
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
