@@ -26,7 +26,7 @@ public class PaymentTransactionCommandListener {
         if (command.equals(PaymentTransactionCommand.UNKNOWN)) {
             throw new IllegalArgumentException("Unknown command");
         }
-        Long key = Long.valueOf(record.key());
+        String key = record.key();
 
         commandHandlers.get(command).processCommand(
                 key, record.value()

@@ -66,7 +66,6 @@ public class AuthController {
         return ResponseEntity.ok(userMapper.toDto(userRepository.findByEmail(email).orElse(null)));
     }
 
-
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
         authService.logout(token);

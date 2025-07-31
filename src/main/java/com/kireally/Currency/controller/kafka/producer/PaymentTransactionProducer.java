@@ -16,19 +16,19 @@ public class PaymentTransactionProducer {
     private static final String TOPIC = "payment-command-result";
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public <T> void sendCommandResult(Long requestId, PaymentTransactionCommand commandType, String message) {
-        Message<String> kafkaMessage = buildMessage(commandType, requestId, message);
+    public <T> void sendCommandResult(String topic,String requestId, PaymentTransactionCommand commandType, String message) {
+        Message<String> kafkaMessage = buildMessage(topic,commandType, requestId, message);
 
         kafkaTemplate.send(kafkaMessage);
         log.info("Sent command result: {}", message);
     }
 
-    private Message<String> buildMessage(PaymentTransactionCommand commandType, Long requestId, String payload) {
+    private Message<String> buildMessage(String topic, PaymentTransactionCommand commandType, String requestId, String payload) {
         return MessageBuilder
                 .withPayload(payload)
-                .setHeader(KafkaHeaders.TOPIC, TOPIC)
+                .setHeader(KafkaHeaders.TOPIC, topic)
                 .setHeader(KafkaHeaders.KEY, requestId)
-                .setHeader("commandType", commandType)
+                .setHeader("command", commandType.toString())
                 .build();
     }
 }

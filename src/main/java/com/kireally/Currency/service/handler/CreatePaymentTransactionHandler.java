@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CreatePaymentTransactionHandler implements PaymentTransactionCommandHandler {
+    private final String TOPIC = "payment_command_result";
     private final PaymentTransactionServiceImpl paymentTransactionService;
 
     private final JsonConverter jsonConverter;
@@ -27,13 +28,14 @@ public class CreatePaymentTransactionHandler implements PaymentTransactionComman
      * с конвертацией по курсу, если currency отличаются.
      */
     @Override
-    public void processCommand(Long requestId, String message) {
+    public void processCommand(String requestId, String message) {
         CreatePaymentTransactionRequest request = jsonConverter.fromJson(message, CreatePaymentTransactionRequest.class);
         paymentTransactionValidator.validateCreateTransactionRequest(request);
 
         var tx = paymentTransactionService.transfer(request);
 
         paymentTransactionProducer.sendCommandResult(
+                TOPIC,
                 requestId,
                 PaymentTransactionCommand.CREATE,
                 tx.toString()
