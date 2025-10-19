@@ -3,25 +3,14 @@ package com.kireally.Currency.validation.validators;
 import com.kireally.Currency.exception.PaymentTransactionValidationException;
 import com.kireally.Currency.model.dto.paymentTransaction.CancelPaymentRequest;
 import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionRequest;
-import com.kireally.Currency.model.entity.bankAccount.BankAccount;
-import com.kireally.Currency.model.entity.bankAccount.PaymentTransaction;
-import com.kireally.Currency.model.entity.bankAccount.Refund;
-import com.kireally.Currency.model.entity.enums.PaymentTransactionStatus;
-import com.kireally.Currency.service.BankAccountService;
-import com.kireally.Currency.service.PaymentTransactionService;
-import com.kireally.Currency.service.RefundService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.model.BankAccountResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -48,7 +37,6 @@ public class PaymentTransactionValidator {
         var violationMessages = violations.stream().map(ConstraintViolation::getMessage).toList();
         errors.addAll(violationMessages);
 
-        // Если есть ошибки, выбрасываем исключение
         if (!errors.isEmpty()) {
             throw new PaymentTransactionValidationException(errors);
         }

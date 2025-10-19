@@ -32,7 +32,7 @@ public class JwtTokenFilter extends GenericFilterBean {
         }
 
         if (bearerToken != null && jwtTokenProvider.validateToken(bearerToken)) {
-            // 1. Проверяем, не в чёрном ли списке этот токен
+            // Проверяем, не в чёрном ли списке этот токен
             if (tokenBlacklistService.isTokenBlacklisted(bearerToken)) {
                 // Если токен в чёрном списке — возвращаем ошибку
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse; // Приводим к HttpServletResponse
@@ -41,7 +41,7 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
 
             try {
-                // 2. Если токен действителен, получаем аутентификацию
+                // Если токен действителен, получаем аутентификацию
                 Authentication auth = jwtTokenProvider.getAuthentication(bearerToken);
                 if (auth != null) {
                     SecurityContextHolder.getContext().setAuthentication(auth); // Устанавливаем аутентификацию в контекст безопасности

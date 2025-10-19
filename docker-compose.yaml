@@ -13,10 +13,8 @@ services:
     container_name: currency
     depends_on:
       - db
-      - redis
       - kafka
-#    env_file:
-#      - .env
+      - redis
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/currency?currentSchema=currency
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -24,6 +22,7 @@ services:
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
       - SPRING_REDIS_PASSWORD=cmVkaXNwYXNzd29yZA==
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     ports:
       - '8080:8080'
 
@@ -45,7 +44,6 @@ services:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass cmVkaXNwYXNzd29yZA==
     volumes:
-      - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
       - cache:/data
 
   zookeeper:
@@ -58,11 +56,11 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.4.4
     container_name: kafka
     ports:
       - "9092:9092"
-      - "9093:9093"  # добавьте этот порт
+      - "9093:9093"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181

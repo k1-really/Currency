@@ -26,7 +26,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "default-group-id");
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
         return new DefaultKafkaConsumerFactory<>(config);
-    }
+    } 
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(final ConsumerFactory<String, String> consumerFactory) {

@@ -35,13 +35,13 @@ databaseChangeLog:
               - column:
                   name: version
                   type: INT
-#  - changeSet:
-#      id: 003-init-bankAccount
-#      author: Zavyalov Kirill
-#      runOnChange: true
-#      changes:
-#        - sqlFile:
-#            path: classpath:db/data/init-bankAccounts.sql
-#            relativeToChangelogFile: false
-#            splitStatements: true
-#            stripComments: true
+  - changeSet:
+      id: 003-init-bankAccount
+      author: Zavyalov Kirill
+      runOnChange: true
+      changes:
+        - sqlFile:
+            path: classpath:db/data/init-bankAccounts.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true
