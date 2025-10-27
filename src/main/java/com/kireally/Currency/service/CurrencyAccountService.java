@@ -3,7 +3,7 @@ package com.kireally.Currency.service;
 import com.kireally.Currency.model.dto.CurrencyAccountDto;
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
-import org.openapitools.model.CurrencyAccountCreate;
+import com.kireally.Currency.model.payment.CurrencyAccountCreate;
 
 import java.util.List;
 import java.util.Map;

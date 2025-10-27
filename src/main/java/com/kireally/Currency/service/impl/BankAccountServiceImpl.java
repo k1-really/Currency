@@ -3,13 +3,13 @@ package com.kireally.Currency.service.impl;
 import com.kireally.Currency.mapper.BankAccountMapper;
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
+import com.kireally.Currency.model.payment.BankAccountCreateRequest;
+import com.kireally.Currency.model.payment.BankAccountResponse;
 import com.kireally.Currency.repository.BankAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.model.BankAccountCreateRequest;
-import org.openapitools.model.BankAccountResponse;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;

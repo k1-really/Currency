@@ -253,10 +253,34 @@
 							<inputSpec>src/main/resources/api/paymentApi.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<output>${project.build.directory}/generated-sources/openapi/paymentService</output>
+							<apiPackage>com.kireally.Currency.api.payment</apiPackage>
+							<modelPackage>com.kireally.Currency.model.payment</modelPackage>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
 								<delegatePattern>true</delegatePattern>
 								<useBigDecimalForFloats>true</useBigDecimalForFloats>
+								<useSpringBoot3>true</useSpringBoot3>
+								<openApiNullable>false</openApiNullable>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-authService</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/api/auth-api.yaml</inputSpec>
+							<generatorName>spring</generatorName>
+							<output>${project.build.directory}/generated-sources/openapi/authService</output>
+							<apiPackage>com.kireally.Currency.api.auth</apiPackage>
+							<modelPackage>com.kireally.Currency.model.auth</modelPackage>
+							<configOptions>
+								<interfaceOnly>true</interfaceOnly>
+								<delegatePattern>true</delegatePattern>
+								<useBigDecimalForFloats>true</useBigDecimalForFloats>
+								<useSpringBoot3>true</useSpringBoot3>
+								<openApiNullable>false</openApiNullable>
 							</configOptions>
 						</configuration>
 					</execution>

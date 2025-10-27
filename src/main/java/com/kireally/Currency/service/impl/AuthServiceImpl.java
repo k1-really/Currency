@@ -1,12 +1,12 @@
 package com.kireally.Currency.service.impl;
 
+import com.kireally.Currency.model.auth.JwtRequest;
+import com.kireally.Currency.model.auth.JwtResponse;
 import com.kireally.Currency.model.entity.user.User;
+import com.kireally.Currency.security.JwtTokenProvider;
 import com.kireally.Currency.service.AuthService;
 import com.kireally.Currency.service.TokenBlacklistService;
 import com.kireally.Currency.service.UserService;
-import com.kireally.Currency.model.dto.auth.JwtRequest;
-import com.kireally.Currency.model.dto.auth.JwtResponse;
-import com.kireally.Currency.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

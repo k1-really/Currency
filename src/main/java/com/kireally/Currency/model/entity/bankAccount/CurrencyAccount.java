@@ -20,6 +20,7 @@ import java.util.List;
 public class CurrencyAccount extends BaseEntity{
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private CurrencyType currencyType;
 
     @PositiveOrZero

@@ -1,10 +1,10 @@
 package com.kireally.Currency.mapper;
 
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
+import com.kireally.Currency.model.payment.BankAccountCreateRequest;
+import com.kireally.Currency.model.payment.BankAccountResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.openapitools.model.BankAccountCreateRequest;
-import org.openapitools.model.BankAccountResponse;
 
 @Mapper(componentModel = "spring")
 public interface BankAccountMapper {

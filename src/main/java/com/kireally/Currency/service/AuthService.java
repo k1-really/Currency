@@ -1,7 +1,7 @@
 package com.kireally.Currency.service;
 
-import com.kireally.Currency.model.dto.auth.JwtRequest;
-import com.kireally.Currency.model.dto.auth.JwtResponse;
+import com.kireally.Currency.model.auth.JwtRequest;
+import com.kireally.Currency.model.auth.JwtResponse;
 
 public interface AuthService {
     JwtResponse login(JwtRequest loginRequest);

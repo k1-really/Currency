@@ -1,0 +1,178 @@
+openapi: 3.0.0
+info:
+  title: Currency Auth API
+  description: Authentication and user management API
+  version: 1.0.0
+
+paths:
+  /currency/auth/login:
+    post:
+      summary: User login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JwtRequest'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /currency/auth/register:
+    post:
+      summary: Register new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        '200':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: Bad request
+
+  /currency/auth/refresh:
+    post:
+      summary: Refresh access token
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+              required:
+                - refreshToken
+      responses:
+        '200':
+          description: Tokens refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /currency/auth/me:
+    get:
+      summary: Get current user information
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Current user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '401':
+          description: Unauthorized
+
+  /currency/auth/logout:
+    post:
+      summary: User logout
+      tags:
+        - Auth
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Bearer token
+      responses:
+        '200':
+          description: Successfully logged out
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          nullable: true
+        name:
+          type: string
+          maxLength: 255
+          nullable: true
+        surname:
+          type: string
+          maxLength: 255
+          nullable: true
+        nickname:
+          type: string
+          maxLength: 255
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        password:
+          type: string
+          writeOnly: true
+          nullable: true
+        passwordConfirmation:
+          type: string
+          writeOnly: true
+          nullable: true
+      required:
+        - name
+        - surname
+        - nickname
+        - email
+        - password
+        - passwordConfirmation
+
+    JwtRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      required:
+        - email
+        - password
+
+    JwtResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string

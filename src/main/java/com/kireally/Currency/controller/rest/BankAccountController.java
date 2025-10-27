@@ -1,11 +1,11 @@
 package com.kireally.Currency.controller.rest;
 
+import com.kireally.Currency.api.payment.AccountsApi;
+import com.kireally.Currency.model.payment.BankAccountCreateRequest;
+import com.kireally.Currency.model.payment.BankAccountResponse;
 import com.kireally.Currency.service.impl.BankAccountServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.api.AccountsApi;
-import org.openapitools.model.BankAccountCreateRequest;
-import org.openapitools.model.BankAccountResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

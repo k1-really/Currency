@@ -4,12 +4,12 @@ import com.kireally.Currency.mapper.CurrencyAccountMapper;
 import com.kireally.Currency.model.dto.CurrencyAccountDto;
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
+import com.kireally.Currency.model.payment.CurrencyAccountCreate;
 import com.kireally.Currency.repository.CurrencyAccountRepository;
 import com.kireally.Currency.service.CurrencyAccountService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.model.CurrencyAccountCreate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,11 +1,11 @@
 package com.kireally.Currency.security;
 
 import com.kireally.Currency.exception.AccessDeniedException;
+import com.kireally.Currency.model.auth.JwtResponse;
 import com.kireally.Currency.model.entity.enums.Role;
 import com.kireally.Currency.model.entity.user.User;
 import com.kireally.Currency.service.UserService;
 import com.kireally.Currency.util.props.JwtProperties;
-import com.kireally.Currency.model.dto.auth.JwtResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

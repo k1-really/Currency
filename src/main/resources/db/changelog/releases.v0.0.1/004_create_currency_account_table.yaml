@@ -43,3 +43,13 @@ databaseChangeLog:
               - column:
                   name: version
                   type: INT
+  - changeSet:
+      id: 004-init-currencyAccount
+      author: Zavyalov Kirill
+      runOnChange: true
+      changes:
+        - sqlFile:
+            path: classpath:db/data/init-currencyAccounts.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true

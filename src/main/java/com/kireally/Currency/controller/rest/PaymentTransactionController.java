@@ -2,6 +2,8 @@ package com.kireally.Currency.controller.rest;
 
 import com.kireally.Currency.controller.kafka.producer.PaymentTransactionProducer;
 import com.kireally.Currency.model.dto.enums.CommandResultStatus;
+import com.kireally.Currency.model.dto.paymentTransaction.CancelPaymentRequest;
+import com.kireally.Currency.model.dto.paymentTransaction.CancelPaymentResponse;
 import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionRequest;
 import com.kireally.Currency.model.dto.paymentTransaction.CreatePaymentTransactionResponse;
 import com.kireally.Currency.model.entity.enums.PaymentTransactionCommand;
@@ -31,7 +33,6 @@ public class PaymentTransactionController {
     public ResponseEntity<CreatePaymentTransactionResponse> initiateTransfer(@RequestBody CreatePaymentTransactionRequest request){
         String requestId = generateRequestId().toString();
         try {
-            // Отправка команды в Kafka
             producer.sendCommandResult(
                     TOPIC,
                     requestId,
@@ -53,6 +54,33 @@ public class PaymentTransactionController {
                             CommandResultStatus.FAILED,
                             "Failed to process payment request",
                             LocalDateTime.now()
+                    ));
+        }
+    }
+
+    @PostMapping("refund")
+    public ResponseEntity<CancelPaymentResponse> cancelTransfer(@RequestBody CancelPaymentRequest request){
+        String requestId = generateRequestId().toString();
+        try {
+            producer.sendCommandResult(
+                    TOPIC,
+                    requestId,
+                    PaymentTransactionCommand.REFUND,
+                    jsonConverter.toJson(request)
+            );
+
+            return ResponseEntity.accepted()
+                    .body(new CancelPaymentResponse(
+                            CommandResultStatus.SUCCESS,
+                            null
+                    ));
+
+        } catch (Exception ex) {
+            log.error("Failed to refund payment transfer, requestId: {}", requestId, ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CancelPaymentResponse(
+                            CommandResultStatus.FAILED,
+                            "Failed to refund payment request"
                     ));
         }
     }

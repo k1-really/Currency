@@ -12,7 +12,7 @@ public enum CurrencyType {
 
     private String name;
 
-    public CurrencyType ofName(String name) {
+    public static CurrencyType ofName(String name) {
         return CurrencyType.valueOf(name);
     }
 }

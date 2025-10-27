@@ -1,11 +1,8 @@
 package com.kireally.Currency.service;
 
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
-import com.kireally.Currency.repository.BankAccountRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.openapitools.model.BankAccountCreateRequest;
-import org.openapitools.model.BankAccountResponse;
-import org.springframework.stereotype.Service;
+import com.kireally.Currency.model.payment.BankAccountCreateRequest;
+import com.kireally.Currency.model.payment.BankAccountResponse;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;

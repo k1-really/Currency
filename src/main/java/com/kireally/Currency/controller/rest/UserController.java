@@ -1,9 +1,9 @@
 package com.kireally.Currency.controller.rest;
 
 import com.kireally.Currency.mapper.UserMapper;
+import com.kireally.Currency.model.auth.UserDto;
 import com.kireally.Currency.model.entity.user.User;
 import com.kireally.Currency.service.UserService;
-import com.kireally.Currency.model.dto.user.UserDto;
 import com.kireally.Currency.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

@@ -4,10 +4,10 @@ package com.kireally.Currency.mapper;
 import com.kireally.Currency.model.dto.CurrencyAccountDto;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
 import com.kireally.Currency.model.entity.enums.CurrencyType;
+import com.kireally.Currency.model.payment.CurrencyAccountCreate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.openapitools.model.CurrencyAccountCreate;
 
 @Mapper(componentModel = "spring")
 public interface CurrencyAccountMapper {

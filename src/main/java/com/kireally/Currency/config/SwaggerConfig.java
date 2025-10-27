@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI(){
-        return new OpenAPI().
-                addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+        return new OpenAPI()
+        .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(
                         new Components()
                                 .addSecuritySchemes("bearerAuth",

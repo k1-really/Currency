@@ -1,13 +1,14 @@
 package com.kireally.Currency.controller.rest;
 
+import com.kireally.Currency.api.auth.CurrencyApi;
 import com.kireally.Currency.mapper.UserMapper;
+import com.kireally.Currency.model.auth.JwtRequest;
+import com.kireally.Currency.model.auth.JwtResponse;
+import com.kireally.Currency.model.auth.UserDto;
 import com.kireally.Currency.model.entity.user.User;
 import com.kireally.Currency.repository.UserRepository;
 import com.kireally.Currency.service.AuthService;
 import com.kireally.Currency.service.UserService;
-import com.kireally.Currency.model.dto.auth.JwtRequest;
-import com.kireally.Currency.model.dto.auth.JwtResponse;
-import com.kireally.Currency.model.dto.user.UserDto;
 import com.kireally.Currency.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/currency/auth")
 @RequiredArgsConstructor
 @Validated
-public class AuthController {
+public class AuthController implements CurrencyApi {
 
     private final AuthService authService;
     private final UserService userService;
