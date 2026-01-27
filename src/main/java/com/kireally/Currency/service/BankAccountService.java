@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 public interface BankAccountService {
-    BankAccountResponse findByCustomerId(@NotNull Long customerId);
+    BankAccountResponse findByUserId(@NotNull Long customerId);
     Optional<BankAccount> findById(@NotNull Long id);
     BankAccountResponse create(BankAccountCreateRequest request);
 }

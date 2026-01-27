@@ -1,12 +1,14 @@
 package com.kireally.Currency.model.entity.user;
 
 
+import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -42,4 +44,12 @@ public class User {
     @CollectionTable(name = "roles")
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<BankAccount> bankAccounts = new ArrayList<>();
 }

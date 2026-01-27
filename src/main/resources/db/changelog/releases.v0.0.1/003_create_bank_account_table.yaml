@@ -14,10 +14,11 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: customer_id
-                  type: BIGINT
+                  name: user_id
+                  type: INT
                   constraints:
                     nullable: false
+                    foreignKeyName: fk_bank_account_user_id
               - column:
                   name: account_number
                   type: VARCHAR(255)

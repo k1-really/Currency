@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CurrencyAccountRepository extends JpaRepository<CurrencyAccount, Long> {
@@ -20,4 +21,7 @@ public interface CurrencyAccountRepository extends JpaRepository<CurrencyAccount
             nativeQuery = true
     )
     List<CurrencyAccount> findByBankAccount(@Param("accountId") Long accountId);
+
+    Optional<CurrencyAccount> findById(Long id);
+
 }

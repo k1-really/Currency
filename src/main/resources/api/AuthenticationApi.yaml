@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Currency Auth API
+  title: AuthenticationApi
   description: Authentication and user management API
   version: 1.0.0
 

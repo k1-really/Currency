@@ -1,11 +1,13 @@
 package com.kireally.Currency.service.impl;
 
+import com.kireally.Currency.exception.bankAccount.BankAccountAlreadyExistsException;
 import com.kireally.Currency.mapper.BankAccountMapper;
 import com.kireally.Currency.model.entity.bankAccount.BankAccount;
 import com.kireally.Currency.model.entity.bankAccount.CurrencyAccount;
 import com.kireally.Currency.model.payment.BankAccountCreateRequest;
 import com.kireally.Currency.model.payment.BankAccountResponse;
 import com.kireally.Currency.repository.BankAccountRepository;
+import com.kireally.Currency.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +27,11 @@ public class BankAccountServiceImpl {
     private final BankAccountRepository bankAccountRepository;
     private final BankAccountMapper bankAccountMapper;
     private final CurrencyAccountServiceImpl currencyAccountService;
+    private final UserService userServiceImpl;
 
     @Transactional
-    public BankAccountResponse findByCustomerId(@NotNull Long customerId) throws EntityNotFoundException {
-        var entity = bankAccountRepository.findByCustomerId(customerId).orElseThrow(
+    public BankAccountResponse findByUserId(@NotNull Long customerId) throws EntityNotFoundException {
+        var entity = bankAccountRepository.findByUserId(customerId).orElseThrow(
                 () -> new EntityNotFoundException("Bank account with customer id " + id + " not found")
         );
         return bankAccountMapper.toDto(entity);
@@ -41,13 +44,16 @@ public class BankAccountServiceImpl {
 
     @Transactional
     public BankAccountResponse create(BankAccountCreateRequest request) {
-        Optional<BankAccount> optionalAccount = bankAccountRepository.findByCustomerId(request.getCustomerId());
+        Optional<BankAccount> optionalAccount = bankAccountRepository.findByUserId(request.getCustomerId());
 
         if (optionalAccount.isPresent()) {
-            log.info("Bank account with customer id {} already exists", optionalAccount.get().getCustomerId());
-            return bankAccountMapper.toDto(optionalAccount.get());
+            log.info("Bank account with customer id {} already exists", optionalAccount.get().getUser());
+            throw new BankAccountAlreadyExistsException(
+                    "Bank account already exists for user ID: " + request.getCustomerId());
         }
+
         BankAccount temp = bankAccountMapper.toEntity(request);
+        temp.setUser(userServiceImpl.getById(request.getCustomerId()));
         BankAccount bankAccount = bankAccountRepository.save(temp);
         List<CurrencyAccount> currencyAccounts = currencyAccountService.saveAll(request.getCurrencyAccounts(), bankAccount);
         bankAccount.setCurrencyAccounts(currencyAccounts);

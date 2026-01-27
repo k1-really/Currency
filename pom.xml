@@ -245,22 +245,24 @@
 				<version>7.8.0</version>
 				<executions>
 					<execution>
-						<id>generate-paymentService</id>
+						<id>generate-bankAccount</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/api/paymentApi.yaml</inputSpec>
+							<inputSpec>src/main/resources/api/BankAccountApi.yaml</inputSpec>
 							<generatorName>spring</generatorName>
-							<output>${project.build.directory}/generated-sources/openapi/paymentService</output>
+							<output>${project.build.directory}/generated-sources/openapi/BankAccountGen</output>
 							<apiPackage>com.kireally.Currency.api.payment</apiPackage>
 							<modelPackage>com.kireally.Currency.model.payment</modelPackage>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
-								<delegatePattern>true</delegatePattern>
+								<delegatePattern>false</delegatePattern>
 								<useBigDecimalForFloats>true</useBigDecimalForFloats>
 								<useSpringBoot3>true</useSpringBoot3>
 								<openApiNullable>false</openApiNullable>
+								<apiNameSuffix>BankAccountGen</apiNameSuffix>
+								<title>BankAccountGen</title>
 							</configOptions>
 						</configuration>
 					</execution>
@@ -270,17 +272,19 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>src/main/resources/api/auth-api.yaml</inputSpec>
+							<inputSpec>src/main/resources/api/AuthenticationApi.yaml</inputSpec>
 							<generatorName>spring</generatorName>
-							<output>${project.build.directory}/generated-sources/openapi/authService</output>
+							<output>${project.build.directory}/generated-sources/openapi/AuthenticationGen</output>
 							<apiPackage>com.kireally.Currency.api.auth</apiPackage>
 							<modelPackage>com.kireally.Currency.model.auth</modelPackage>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
-								<delegatePattern>true</delegatePattern>
+								<delegatePattern>false</delegatePattern>
 								<useBigDecimalForFloats>true</useBigDecimalForFloats>
 								<useSpringBoot3>true</useSpringBoot3>
 								<openApiNullable>false</openApiNullable>
+								<apiNameSuffix>Api</apiNameSuffix>
+								<useApiNameSuffix>true</useApiNameSuffix>
 							</configOptions>
 						</configuration>
 					</execution>

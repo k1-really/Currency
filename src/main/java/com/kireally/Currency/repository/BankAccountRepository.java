@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
     BankAccount findByAccountNumber(String accountNumber);
     @EntityGraph(attributePaths = "currencyAccounts")
-    Optional<BankAccount> findByCustomerId(Long customerId);
+    Optional<BankAccount> findByUserId(Long customerId);
 }

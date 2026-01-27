@@ -32,6 +32,12 @@ public class CurrencyAccountServiceImpl implements CurrencyAccountService {
                 .toList();
     }
 
+    public CurrencyAccountDto getCurrencyAccount(Long accountId){
+        return currencyAccountRepository.findById(accountId)
+                .map(currencyAccountMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("There is no such currencyAccount!"));
+    }
+
     @Transactional
     public Map<Long, CurrencyAccount> getAll(Set<Long> ids) {
         var cleanIds = ids.stream()

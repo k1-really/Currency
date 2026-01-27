@@ -1,5 +1,6 @@
 package com.kireally.Currency.model.entity.bankAccount;
 
+import com.kireally.Currency.model.entity.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,9 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankAccount extends BaseEntity{
-    @Column(name = "customer_id")
     @NotNull
-    private Long customerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @NotBlank
     private String accountNumber;
@@ -30,5 +32,7 @@ public class BankAccount extends BaseEntity{
             orphanRemoval = true
     )
     private List<CurrencyAccount> currencyAccounts;
+
+
 
 }

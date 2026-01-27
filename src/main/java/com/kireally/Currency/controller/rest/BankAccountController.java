@@ -20,7 +20,7 @@ public class BankAccountController implements AccountsApi {
 
     @Override
     public ResponseEntity<BankAccountResponse> getAccount(Long accountId) {
-        BankAccountResponse response = bankAccountService.findByCustomerId(accountId);
+        BankAccountResponse response = bankAccountService.findByUserId(accountId);
         return ResponseEntity.ok(response);
     }
 
@@ -31,5 +31,6 @@ public class BankAccountController implements AccountsApi {
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
+
 }
 

@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     private final UserDetailsService userDetailsService;
     private final UserService userService;
     private Key key;
-
+    //todo: key - final init in constructor.
     @PostConstruct
     public void init(){
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
