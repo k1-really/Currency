@@ -10,6 +10,7 @@ spring:
         format_sql: true
         type: true
         use_sql_comments: true
+
   kafka:
     admin:
       properties:
@@ -36,7 +37,7 @@ spring:
     enabled: true
     default-schema: currency
 
-
+# сделать вычитку из конф файла, который не попадет в гитхаб
   #  config:
 #    import: optional:file:.env[.properties]
 
