@@ -1,4 +1,3 @@
-
 volumes:
   cache:
     driver: local
@@ -6,10 +5,11 @@ volumes:
     driver: local
 
 services:
+  # ===== ИЗМЕНЕНО: убрал ports, добавил networks =====
   app:
     build:
       context: .
-    container_name: currency
+    # container_name: currency   # <--- УБРАТЬ или ЗАКОММЕНТИРОВАТЬ (иначе нельзя масштабировать)
     depends_on:
       - db
       - kafka
@@ -22,8 +22,23 @@ services:
       - SPRING_REDIS_PORT=6379
       - SPRING_REDIS_PASSWORD=cmVkaXNwYXNzd29yZA==
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    # ports:                     # <--- УБРАТЬ или ЗАКОММЕНТИРОВАТЬ
+    #   - '8080:8080'            # <--- УБРАТЬ или ЗАКОММЕНТИРОВАТЬ
+    networks:
+      - app-network              # <--- ДОБАВИТЬ
+
+  # ===== НОВЫЙ СЕРВИС: NGINX как балансировщик =====
+  nginx-lb:
+    image: nginx:latest
+    container_name: nginx-balancer
     ports:
-      - '8080:8080'
+      - "8080:80"                # <--- СЮДА ПЕРЕЕХАЛ порт 8080
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro   # <--- ДОБАВИТЬ файл nginx.conf
+    depends_on:
+      - app
+    networks:
+      - app-network              # <--- ДОБАВИТЬ
 
   db:
     image: postgres:16
@@ -34,6 +49,8 @@ services:
       - POSTGRES_DB=currency
     volumes:
       - ./src/main/resources/db-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network              # <--- ДОБАВИТЬ
 
   redis:
     image: redis:7.2-rc-alpine
@@ -44,6 +61,8 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass cmVkaXNwYXNzd29yZA==
     volumes:
       - cache:/data
+    networks:
+      - app-network              # <--- ДОБАВИТЬ
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -53,6 +72,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network              # <--- ДОБАВИТЬ
 
   kafka:
     image: confluentinc/cp-kafka:7.4.4
@@ -72,9 +93,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
     depends_on:
       - zookeeper
+    networks:
+      - app-network              # <--- ДОБАВИТЬ
 
-
-
-
-
-#TODO: Сделать так, чтобы секреты импортировались из .env файла.
+# ===== НОВАЯ СЕТЬ =====
+networks:
+  app-network:
+    driver: bridge

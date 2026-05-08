@@ -77,6 +77,8 @@ public class ApplicationConfig {
 
                 // Настраиваем доступ к конечным точкам (авторизация запросов)
                 .authorizeHttpRequests(authorize -> authorize
+                        // ===== ДОБАВЛЕНО: тестовые эндпоинты для балансировки =====
+                        .requestMatchers("/rest/sync", "/kafka/async", "/kafka/results", "/fast", "/slow", "/stats").permitAll()
                         .requestMatchers("/currency/auth/**").permitAll() // Разрешаем доступ к эндпоинтам авторизации без авторизации
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
